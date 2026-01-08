@@ -11,7 +11,7 @@ public interface INumberParser
 
 public sealed class NumberParser : INumberParser
 {
-    private static readonly char[] _delimiters = { ',', '\n' };
+    private static readonly char[] _defaultDelimiters = { ',', '\n' };
 
     /// <summary>
     /// Parse the input string into list of integers. Empty values and invalid integers are parsed as zero.
@@ -24,8 +24,17 @@ public sealed class NumberParser : INumberParser
         {
             return new[] { 0};
         }
-                
-    var parts = input.Split(_delimiters);
+
+        var delimiters = new List<char>(_defaultDelimiters);
+        var numbersSection = input;
+
+        if (HasCustomDelimiter(input))
+        {
+            delimiters.Add(GetCustomDelimiter(input));
+            numbersSection = RemoveDelimiterHeader(input);
+        }
+
+        var parts = numbersSection.Split(delimiters.ToArray());
 
         var numbers = parts
             .Select(ParseNumber)
@@ -49,4 +58,13 @@ public sealed class NumberParser : INumberParser
 
         return number;
     }
+
+    private static bool HasCustomDelimiter(string input)
+        => input.StartsWith("//");
+
+    private static char GetCustomDelimiter(string input)
+        => input[2];
+
+    private static string RemoveDelimiterHeader(string input)
+        => input.Substring(4);
 }

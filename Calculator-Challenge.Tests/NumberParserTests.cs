@@ -33,4 +33,25 @@ public class NumberParserTests
 
         result.Should().Equal(expected);
     }
+
+    [Fact]
+    public void Parse_SupportsSingleCharacterCustomDelimiter()
+    {
+        var parser = new NumberParser();
+
+        var result = parser.Parse("//#\n2#5");
+
+        result.Should().Equal(2, 5);
+    }
+
+    [Fact]
+    public void Parse_CustomDelimiterStillSupportsDefaultDelimiters()
+    {
+        var parser = new NumberParser();
+
+        var result = parser.Parse("//,\n2,ff,100");
+
+        result.Should().Equal(2, 0, 100);
+    }
+
 }
