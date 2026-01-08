@@ -13,6 +13,8 @@ public class NumberParserTests
     [InlineData(",", new[] { 0, 0 })]
     [InlineData("", new[] { 0 })]
     [InlineData("-2,1", new[] { -2, 1 })]
+    [InlineData("-2,1000", new[] { -2, 1000 })]
+    [InlineData("-2,1001", new[] { -2, 0 })]
     public void Parse_Input_ReturnsNormalizedIntegers(string input, int[] expected)
     {
         var result = _parser.Parse(input);

@@ -41,8 +41,12 @@ public sealed class NumberParser : INumberParser
             return 0;
         }
 
-        return int.TryParse(value, out var number)
-            ? number
-            : 0;
+        if (!int.TryParse(value, out var number))
+            return 0;
+
+        if (number > 1000)
+            return 0;
+
+        return number;
     }
 }
