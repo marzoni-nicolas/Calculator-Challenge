@@ -1,6 +1,4 @@
-﻿using Calculator_Challenge.Exceptions;
-
-namespace Calculator_Challenge.Services;
+﻿namespace Calculator_Challenge.Services;
 
 public interface ICalculator
 {
@@ -18,11 +16,6 @@ public sealed class Calculator : ICalculator
 
         // Keeping this simple as first iteration. "Add" method could accept two arguments a int and b int, so we just do a+b.
         var parts = input.Split(',');
-
-        if (parts.Length > 2)
-        {
-            throw new TooManyNumbersException(parts.Length);
-        }
 
         return parts.Sum(ParseNumber);
     }
