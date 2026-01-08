@@ -1,7 +1,5 @@
 ﻿using Services = Calculator_Challenge.Services;
-using Calculator_Challenge.Exceptions;
 using FluentAssertions;
-using Xunit;
 
 namespace Calculator.Tests;
 
@@ -16,20 +14,12 @@ public class CalculatorTests
     [InlineData("", 0)]
     [InlineData(",", 0)]
     [InlineData("5,tytyt", 5)]
+    [InlineData("1,2,3,4,5,6,7,8,9,10,11,12", 78)]
+    [InlineData("1,2,3,6", 12)]
     public void Add_ValidInputs_ReturnsExpectedResult(string input, int expected)
     {
         var result = _calculator.Add(input);
 
         result.Should().Be(expected);
-    }
-
-    [Fact]
-    public void Add_MoreThanTwoNumbers_ThrowsException()
-    {
-        var act = () => _calculator.Add("1,2,3");
-
-        act.Should()
-            .Throw<TooManyNumbersException>()
-            .WithMessage("*maximum of 2 numbers*");
     }
 }
