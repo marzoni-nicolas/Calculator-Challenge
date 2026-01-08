@@ -22,7 +22,7 @@ Calculator-Challenge/
 
 ### Key Features
 
-- **String Calculator**: Parses comma-separated numeric strings and returns the sum
+- **String Calculator**: Parses delimited (comma or newline separated) numeric strings and returns the sum
 - **Input Handling**: 
   - Handles empty strings (returns 0)
   - Handles invalid numbers (treats as 0)
