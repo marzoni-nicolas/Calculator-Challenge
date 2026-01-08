@@ -1,7 +1,7 @@
 ﻿using Services = Calculator_Challenge.Services;
 using FluentAssertions;
 
-namespace Calculator.Tests;
+namespace Calculator_Challenge.Tests;
 
 public class CalculatorTests
 {

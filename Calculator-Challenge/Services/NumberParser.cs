@@ -13,6 +13,11 @@ public sealed class NumberParser : INumberParser
 {
     private static readonly char[] delimiters = { ',', '\n' };
 
+    /// <summary>
+    /// Parse the input string into list of integers. Empty values and invalid integers are parsed as zero.
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
     public IReadOnlyList<int> Parse(string input)
     {
         if (string.IsNullOrWhiteSpace(input))
