@@ -13,9 +13,11 @@ Calculator-Challenge/
 ├── Calculator-Challenge/              # Main console application
 │   ├── Services/
 │   │   └── Calculator.cs             # Core calculator logic with ICalculator interface
+│   │   └── ApplicationService.cs     # Orchestrate the calculator workflow. Parse, Validate and Calculate. 
+│   │   └── NumberParser.cs           # Parses the input into numbers.
+│   │   └── NumberListValidator.cs    # Validates the list of number.
 │   ├── Program.cs                    # Application entry point with DI setup
-├── Calculator-Challenge.Tests/        # Unit test project
-│   ├── CalculatorTests.cs            # Comprehensive test suite using xUnit and FluentAssertions
+├── Calculator-Challenge.Tests/        # Unit test project. Comprehensive test suite using xUnit and FluentAssertions.
 ```
 
 ## Solution Summary
@@ -26,7 +28,8 @@ Calculator-Challenge/
 - **Input Handling**: 
   - Handles empty strings (returns 0)
   - Handles invalid numbers (treats as 0)
-  - Supports negative numbers
+  - Handles numbers higher than 1000 as an invalid numbers (treats as 0)
+  - Do not allow negative numbers
   - Supports arbitrary number of inputs
 - **Architecture**: 
   - Interface-based design (`ICalculator`)
