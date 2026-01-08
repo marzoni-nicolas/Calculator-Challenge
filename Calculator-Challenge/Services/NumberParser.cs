@@ -11,7 +11,7 @@ public interface INumberParser
 
 public sealed class NumberParser : INumberParser
 {
-    private static readonly char[] delimiters = { ',', '\n' };
+    private static readonly char[] _delimiters = { ',', '\n' };
 
     /// <summary>
     /// Parse the input string into list of integers. Empty values and invalid integers are parsed as zero.
@@ -25,7 +25,7 @@ public sealed class NumberParser : INumberParser
             return new[] { 0};
         }
                 
-    var parts = input.Split(delimiters);
+    var parts = input.Split(_delimiters);
 
         var numbers = parts
             .Select(ParseNumber)
@@ -41,8 +41,12 @@ public sealed class NumberParser : INumberParser
             return 0;
         }
 
-        return int.TryParse(value, out var number)
-            ? number
-            : 0;
+        if (!int.TryParse(value, out var number))
+            return 0;
+
+        if (number > 1000)
+            return 0;
+
+        return number;
     }
 }
