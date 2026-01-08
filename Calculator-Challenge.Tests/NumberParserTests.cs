@@ -19,4 +19,16 @@ public class NumberParserTests
 
         result.Should().Equal(expected);
     }
+
+    [Theory]
+    [InlineData("1\n2,3", new[] { 1, 2, 3 })]
+    [InlineData("1,\n2", new[] { 1, 0, 2 })]
+    [InlineData("\n", new[] { 0 })]
+    [InlineData("4\n-3", new[] { 4, -3 })]
+    public void Parse_SupportsNewlineAndCommaDelimiters(string input, int[] expected)
+    {
+        var result = _parser.Parse(input);
+
+        result.Should().Equal(expected);
+    }
 }

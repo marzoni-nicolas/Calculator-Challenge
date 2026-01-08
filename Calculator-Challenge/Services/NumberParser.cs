@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace Calculator_Challenge.Services;
 
 
@@ -9,14 +11,16 @@ public interface INumberParser
 
 public sealed class NumberParser : INumberParser
 {
+    private static readonly char[] delimiters = { ',', '\n' };
+
     public IReadOnlyList<int> Parse(string input)
     {
         if (string.IsNullOrWhiteSpace(input))
         {
             return new[] { 0};
         }
-
-        var parts = input.Split(',');
+                
+    var parts = input.Split(delimiters);
 
         var numbers = parts
             .Select(ParseNumber)
