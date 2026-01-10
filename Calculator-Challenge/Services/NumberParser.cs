@@ -1,4 +1,5 @@
 ﻿
+using Calculator_Challenge.Options;
 using System;
 using System.Text.RegularExpressions;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -13,7 +14,7 @@ public interface INumberParser
 
 public sealed class NumberParser : INumberParser
 {
-    private static readonly IList<string> _defaultDelimiters = new[] { ",", "\n" };
+    private readonly IList<string> _defaultDelimiters;
 
     // This regex captures:
     // 1) One or more delimiters wrapped in brackets: [*][!!][r9r]
@@ -21,6 +22,19 @@ public sealed class NumberParser : INumberParser
     private static readonly string _regexDelimiterPattern = @"^//(\[(.+?)\])+\n|^//(.)\n";
 
     private static readonly string _delimiterHeaderStarsWithString = "//";
+
+    private readonly ICalculatorOptions _options;
+
+    public NumberParser(ICalculatorOptions options)
+    {
+        _options = options;
+
+        _defaultDelimiters = new List<string>
+        {
+            ",",
+            _options.AlternateDelimiter.ToString()
+        };
+    }
 
     /// <summary>
     /// Parse the input string into list of integers. Empty values and invalid integers are parsed as zero.
@@ -52,7 +66,7 @@ public sealed class NumberParser : INumberParser
         return numbers;
     }
 
-    private static int ParseNumber(string value)
+    private int ParseNumber(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
@@ -62,7 +76,7 @@ public sealed class NumberParser : INumberParser
         if (!int.TryParse(value, out var number))
             return 0;
 
-        if (number > 1000)
+        if (number > _options.MaxAllowedValue)
             return 0;
 
         return number;

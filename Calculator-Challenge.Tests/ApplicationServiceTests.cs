@@ -1,7 +1,8 @@
 ﻿using Calculator_Challenge.Exceptions;
+using Calculator_Challenge.Options;
 using Calculator_Challenge.Services;
 using FluentAssertions;
-using System.ComponentModel.DataAnnotations;
+using NSubstitute;
 
 namespace Calculator_Challenge.Tests;
 
@@ -10,9 +11,22 @@ namespace Calculator_Challenge.Tests;
 /// </summary>
 public class ApplicationServiceTests
 {
-    private readonly IApplicationService _applicationService = new ApplicationService(new NumberParser(),
-                                                                                      new NumberListValidator(),
-                                                                                      new Calculator());
+    private ICalculatorOptions _calculatorOptions;
+    private readonly IApplicationService _applicationService;
+
+    public ApplicationServiceTests()
+    {
+        _calculatorOptions = Substitute.For<ICalculatorOptions>();
+
+        _calculatorOptions.AlternateDelimiter.Returns('\n');
+        _calculatorOptions.MaxAllowedValue.Returns(1000);
+        _calculatorOptions.DenyNegativeNumbers.Returns(true);
+
+        _applicationService = new ApplicationService(
+            new NumberParser(_calculatorOptions),
+            new NumberListValidator(_calculatorOptions),
+            new Calculator());
+    }
 
     [Theory]
     [InlineData("//[,,]\n4,,5", 9)]
@@ -30,7 +44,7 @@ public class ApplicationServiceTests
     {
         var result = _applicationService.Calculate(input);
 
-        result.Should().Be(expected);
+        result.total.Should().Be(expected);
     }
 
     [Fact]
