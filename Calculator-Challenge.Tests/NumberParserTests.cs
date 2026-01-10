@@ -54,4 +54,28 @@ public class NumberParserTests
         result.Should().Equal(2, 0, 100);
     }
 
+    [Theory]
+    [InlineData("//[***]\n11***22***33", new[] { 11, 22, 33 })]
+    [InlineData("//[&]\n11&22&33", new[] { 11, 22, 33 })]
+    public void Parse_SupportsCustomDelimiterOfAnyLength(string input, int[] expected)
+    {
+        var parser = new NumberParser();
+
+        var result = parser.Parse(input);
+
+        result.Should().Equal(expected);
+    }
+
+    [Theory]
+    [InlineData("//[***]\n***", new[] { 0 ,0 })]
+    [InlineData("//[##]\n####", new[] { 0, 0, 0 })]
+    public void Parse_SupportsCustomDelimiterOfAnyLength_WithoutNumbers(string input, int[] expected)
+    {
+        var parser = new NumberParser();
+
+        var result = parser.Parse(input);
+
+        result.Should().Equal(expected);
+    }
+
 }
