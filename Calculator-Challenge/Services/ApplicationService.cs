@@ -9,7 +9,7 @@ public interface IApplicationService
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
-    int Calculate(string input);
+    (int total, IReadOnlyCollection<int> numbers, char separator) Calculate(string input);
 }
 
 public sealed class ApplicationService : IApplicationService
@@ -28,13 +28,13 @@ public sealed class ApplicationService : IApplicationService
         _calculator = calculator;
     }
 
-    public int Calculate(string input)
+    public (int total, IReadOnlyCollection<int> numbers, char separator) Calculate(string input)
     {
         var numbers = _parser.Parse(input);
 
         _validator.Validate(numbers);
 
-        return _calculator.Add(numbers);
+        return (_calculator.Add(numbers), numbers, '+');
     }
 }
 

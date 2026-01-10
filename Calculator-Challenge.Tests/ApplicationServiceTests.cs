@@ -30,7 +30,7 @@ public class ApplicationServiceTests
     {
         var result = _applicationService.Calculate(input);
 
-        result.Should().Be(expected);
+        result.total.Should().Be(expected);
     }
 
     [Fact]

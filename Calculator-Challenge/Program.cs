@@ -19,4 +19,4 @@ if (args.Length == 0)
 
 var result = app.Calculate(args[0]);
 
-Console.WriteLine($"Result: {result}");
+Console.WriteLine($"{string.Join(result.separator, result.numbers)}={result.total}");
