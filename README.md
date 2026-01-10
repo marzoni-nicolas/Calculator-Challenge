@@ -29,6 +29,7 @@ Calculator-Challenge/
   - New Line (\n)
   - Custom single-char delimiter (//,\n)
   - Custom multi-char delimiter (//[***]\n)
+  - Multiple custom multi-char delimiter (//[***][#]\n)
 - **Input Handling**: 
   - Handles empty strings (returns 0)
   - Handles invalid numbers (treats as 0)
@@ -76,5 +77,11 @@ dotnet test
 | `","` | 0 |
 | `"5,tytyt"` | 5 |
 | `"1,2,3,4,5,6,7,8,9,10,11,12"` | 78 |
-| `"1***2***3"` | 6 |
 | `"1\n2\n3"` | 6 |
+| `"//*\n1*2*3"` | 6 |
+| `"//[***]\n1***2***3"` | 6 |
+| `"//[***][#]\n11***22#33"` | 6|
+
+## Improvements
+- Validate or clean repeated delimiters.
+- Validate that at least one delimiter exists when header (//) exists.

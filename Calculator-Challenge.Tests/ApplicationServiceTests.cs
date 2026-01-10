@@ -23,6 +23,8 @@ public class ApplicationServiceTests
     [InlineData("//[##]\n####", 0)]
     [InlineData("1,\n2", 3)]
     [InlineData("5,tytyt", 5)]
+    [InlineData("//[***][#]\n11***22#33", 66)]
+    [InlineData("//[***][#][&]\n1***2&3", 6)]
 
     public void Calling_Calculate_WithValidInput_ShouldSucceed(string input, int expected)
     {

@@ -83,4 +83,16 @@ public class NumberParserTests
         result.Should().Equal(expected);
     }
 
+    [Theory]
+    [InlineData("//[***][#]\n11***22#33", new[] { 11, 22, 33 })]
+    [InlineData("//[***][#][&]\n1***2&3", new[] { 1, 2, 3 })]
+    public void Parse_SupportsMultipleCustomDelimiterOfAnyLength(string input, int[] expected)
+    {
+        var parser = new NumberParser();
+
+        var result = parser.Parse(input);
+
+        result.Should().Equal(expected);
+    }
+
 }
