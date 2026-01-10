@@ -32,7 +32,7 @@ public sealed class NumberParser : INumberParser
 
         if (HasCustomDelimiter(input))
         {
-            delimiters.Add(GetCustomDelimiter(input, out int delimiterHeaderLenght));
+            delimiters = [GetCustomDelimiter(input, out int delimiterHeaderLenght)];
             numbersSection = RemoveDelimiterHeader(input, delimiterHeaderLenght);
         }
 
