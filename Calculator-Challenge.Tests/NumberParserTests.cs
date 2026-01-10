@@ -122,5 +122,4 @@ public class NumberParserTests
 
         result.Should().Equal([1, 0]);
     }
-
 }
