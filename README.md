@@ -81,3 +81,7 @@ dotnet test
 | `"//*\n1*2*3"` | 6 |
 | `"//[***]\n1***2***3"` | 6 |
 | `"//[***][#]\n11***22#33"` | 6|
+
+## Improvements
+- Validate or clean repeated delimiters.
+- Validate that at least one delimiter exists when header (//) exists.
