@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Text.RegularExpressions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Calculator_Challenge.Services;
 
@@ -13,7 +14,13 @@ public interface INumberParser
 public sealed class NumberParser : INumberParser
 {
     private static readonly IList<string> _defaultDelimiters = new[] { ",", "\n" };
-    private static readonly string _regexDelimiterPattern = @"^//(\[(.+?)\]|(.))\n";
+
+    // This regex captures:
+    // 1) One or more delimiters wrapped in brackets: [*][!!][r9r]
+    // 2) OR a single-character delimiter: ;
+    private static readonly string _regexDelimiterPattern = @"^//(\[(.+?)\])+\n|^//(.)\n";
+
+    private static readonly string _delimiterHeaderStarsWithString = "//";
 
     /// <summary>
     /// Parse the input string into list of integers. Empty values and invalid integers are parsed as zero.
@@ -32,7 +39,7 @@ public sealed class NumberParser : INumberParser
 
         if (HasCustomDelimiter(input))
         {
-            delimiters = [GetCustomDelimiter(input, out int delimiterHeaderLenght)];
+            delimiters = GetCustomDelimiters(input, out int delimiterHeaderLenght);
             numbersSection = RemoveDelimiterHeader(input, delimiterHeaderLenght);
         }
 
@@ -62,37 +69,53 @@ public sealed class NumberParser : INumberParser
     }
 
     private static bool HasCustomDelimiter(string input)
-        => input.StartsWith("//");
+        => input.StartsWith(_delimiterHeaderStarsWithString);
 
     /// <summary>
-    /// Detect and extract a custom delimiter definition, if present.
+    /// Detect and extract a custom delimiters definition, if present.
     /// Supported formats at this stage:
     /// 1) //;\n1;2 - Single-char delimiter without brackets from requirement #6.
     /// 2) //[***]\n1***2 - Multi-char delimiter within brackets.
+    /// 3) //[***][#]\n1***2#3 - Multiple multi-char delimiter within brackets.
     /// </summary>
     /// <param name="input"></param>
     /// <param name="delimiterHeaderLenght"></param>
     /// <returns></returns>
-    private static string GetCustomDelimiter(string input, out int delimiterHeaderLenght)
+    private static List<string> GetCustomDelimiters(string input, out int delimiterHeaderLenght)
     {
+        var customDelimiters = new List<string>();
+        
         var match = Regex.Match(input, _regexDelimiterPattern);
 
-        if (match.Success)
+        if (!match.Success)
         {
-            // Group 2 → bracketed delimiter (any length)
-            // Group 3 → single-character delimiter
-            var delimiter = match.Groups[2].Success
-                ? match.Groups[2].Value
-                : match.Groups[3].Value;
+            // Not defined as a requirement, but an empty header should not happen.
 
-            // Remove the delimiter declaration line before parsing numbers
-            delimiterHeaderLenght = match.Length;
-
-            return delimiter;
+            delimiterHeaderLenght = 0;
+            return [string.Empty];
         }
 
-        delimiterHeaderLenght = 0;
-        return string.Empty;
+        // Extract all bracketed delimiters, if present
+        var bracketMatches = Regex.Matches(match.Value, @"\[(.+?)\]");
+
+        if (bracketMatches.Count > 0)
+        {
+            // Brackets delimiter (any length)
+            foreach (Match bracketMatch in bracketMatches)
+            {
+                customDelimiters.Add(bracketMatch.Groups[1].Value);
+            }
+        }
+        else
+        {
+            // No brackets delimiter (Single-char)
+            customDelimiters.Add(match.Groups[3].Value);
+        }
+
+        // Returns the delimiter header length so that can be removed before parsing numbers
+        delimiterHeaderLenght = match.Length;
+
+        return customDelimiters;
     }
 
     private static string RemoveDelimiterHeader(string input, int delimiterHeaderLength)
