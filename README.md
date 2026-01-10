@@ -24,7 +24,11 @@ Calculator-Challenge/
 
 ### Key Features
 
-- **String Calculator**: Parses delimited (comma or newline separated) numeric strings and returns the sum
+- **String Calculator**: Parses delimited numeric strings and returns the sum. Supported delimiters:
+  - Comma (,)
+  - New Line (\n)
+  - Custom single-char delimiter (//,\n)
+  - Custom multi-char delimiter (//[***]\n)
 - **Input Handling**: 
   - Handles empty strings (returns 0)
   - Handles invalid numbers (treats as 0)
@@ -72,3 +76,5 @@ dotnet test
 | `","` | 0 |
 | `"5,tytyt"` | 5 |
 | `"1,2,3,4,5,6,7,8,9,10,11,12"` | 78 |
+| `"1***2***3"` | 6 |
+| `"1\n2\n3"` | 6 |
