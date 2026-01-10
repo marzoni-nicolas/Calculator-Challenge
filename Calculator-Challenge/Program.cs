@@ -1,7 +1,18 @@
-﻿using Calculator_Challenge.Services;
+﻿using Calculator_Challenge.Options;
+using Calculator_Challenge.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
+var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json", optional: true)
+    .AddCommandLine(args)
+    .Build();
+
+var options = new CalculatorOptions();
+configuration.GetSection("Calculator").Bind(options);
+
 var services = new ServiceCollection()
+    .AddSingleton<ICalculatorOptions>(options)
     .AddSingleton<ICalculator, Calculator>()
     .AddSingleton<INumberParser, NumberParser>()
     .AddSingleton<INumberListValidator, NumberListValidator>()
@@ -10,13 +21,20 @@ var services = new ServiceCollection()
 
 var app = services.GetRequiredService<IApplicationService>();
 
-// Expect the expression as the first argument
-if (args.Length == 0)
+
+Console.WriteLine("Calculator started. Press Ctrl+C to exit.");
+
+while (true)
 {
-    Console.WriteLine("Usage: dotnet run -- \"3,4\"");
-    return;
+    Console.Write("Enter the input string:");
+    string? input = Console.ReadLine();
+
+    if (string.IsNullOrWhiteSpace(input))
+    {
+        continue;
+    }
+
+    var result = app.Calculate(input);
+
+    Console.WriteLine($"{string.Join(result.separator, result.numbers)}={result.total}");
 }
-
-var result = app.Calculate(args[0]);
-
-Console.WriteLine($"{string.Join(result.separator, result.numbers)}={result.total}");
