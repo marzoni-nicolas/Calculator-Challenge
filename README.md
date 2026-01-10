@@ -43,6 +43,17 @@ Calculator-Challenge/
   - Unit tests with xUnit
   - Fluent assertions for readable test expectations
   - Multiple test cases covering edge cases
+- **Custom Calculator Options supported**:
+  - CLI options
+  ```json
+	dotnet run -- \
+	Calculator:MaxAllowedValue=500 \
+	Calculator:DenyNegativeNumbers=false \
+	Calculator:AlternateDelimiter=;
+  ```
+  - appsetting.json options
+- **Execution loop**:
+  - The app will continue running and sking for numbers until Ctrl+C is pressed.
 
 ### Technical Stack
 
