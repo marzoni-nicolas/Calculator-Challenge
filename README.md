@@ -96,3 +96,6 @@ dotnet test
 ## Improvements
 - Validate or clean repeated delimiters.
 - Validate that at least one delimiter exists when header (//) exists.
+- If necessary, consider adding nuget for better CLI argument support.
+- Define IOperator or similar for Substraction, Multiplication and Division.
+- Add Agents.MD for better Coding Agents assistance.
